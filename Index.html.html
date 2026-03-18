@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Data Analysis Trainer Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F6F2;
+  --card:#FFFFFF;
+  --border:#E5E2DA;
+  --text:#1A1814;
+  --muted:#7A7670;
+  --hint:#B0ADA6;
+  --blue:#1A56A0;
+  --blue-l:#EBF2FC;
+  --blue-d:#0D3870;
+  --green:#2D6A2D;
+  --green-l:#EAF4EA;
+  --teal:#0E6B5A;
+  --teal-l:#E3F4F1;
+  --amber:#9A5E10;
+  --amber-l:#FDF0DC;
+  --purple:#5040A8;
+  --purple-l:#EEEAFC;
+  --red:#8B2020;
+  --red-l:#FDEAEA;
+  --accent:#1A56A0;
+  --radius:14px;
+  --shadow:0 2px 16px rgba(0,0,0,0.07);
+}
+html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);}
+
+/* ── Layout ── */
+.page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.25rem;}
+
+/* ── Cover ── */
+.cover{max-width:560px;width:100%;text-align:center;animation:fadeUp .5s ease both;}
+.brand{font-family:'DM Serif Display',serif;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:32px;}
+.cover-icon{width:72px;height:72px;background:var(--blue-l);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;}
+.cover h1{font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:var(--text);line-height:1.2;margin-bottom:8px;}
+.cover .tagline{font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6;}
+.chapter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px;text-align:left;}
+.cg-item{padding:10px 14px;border-radius:10px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.cg-item .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.cg1{background:var(--green-l);color:var(--green);} .cg1 .dot{background:var(--green);}
+.cg2{background:var(--blue-l);color:var(--blue);} .cg2 .dot{background:var(--blue);}
+.cg3{background:var(--teal-l);color:var(--teal);} .cg3 .dot{background:var(--teal);}
+.cg4{background:var(--amber-l);color:var(--amber);} .cg4 .dot{background:var(--amber);}
+.cg5{background:var(--purple-l);color:var(--purple);} .cg5 .dot{background:var(--purple);}
+.cg5{grid-column:1/-1;}
+
+/* ── Form card ── */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;text-align:left;box-shadow:var(--shadow);}
+.form-card h3{font-size:15px;font-weight:600;color:var(--text);margin-bottom:18px;text-align:center;}
+.fld{margin-bottom:14px;}
+.fld label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;}
+.fld input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s;}
+.fld input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,160,.1);}
+.ferr{font-size:11.5px;color:var(--red);margin-top:5px;display:none;}
+.go-btn{width:100%;margin-top:10px;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;letter-spacing:.02em;}
+.go-btn:hover{background:var(--blue-d);transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,86,160,.3);}
+.go-btn:active{transform:translateY(0);}
+
+/* ── Quiz ── */
+.quiz-wrap{max-width:660px;width:100%;animation:fadeUp .35s ease both;}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.quiz-title{font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;color:var(--text);}
+.quiz-info{font-size:12px;color:var(--muted);}
+.prog-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:20px;}
+.prog-fill{height:4px;border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.candidate-bar{font-size:12px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.candidate-bar strong{color:var(--text);}
+
+/* ── Question card ── */
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;box-shadow:var(--shadow);}
+.q-tags{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.qn{font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.08em;}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;}
+.t-con{background:var(--blue-l);color:var(--blue);}
+.t-scen{background:var(--amber-l);color:var(--amber);}
+.ch1{background:var(--green-l);color:var(--green);}
+.ch2{background:var(--blue-l);color:var(--blue);}
+.ch3{background:var(--teal-l);color:var(--teal);}
+.ch4{background:var(--amber-l);color:var(--amber);}
+.ch5{background:var(--purple-l);color:var(--purple);}
+.q-text{font-size:16px;font-weight:500;line-height:1.65;color:var(--text);margin-bottom:20px;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--text);text-align:left;cursor:pointer;transition:all .15s;line-height:1.5;font-family:'DM Sans',sans-serif;width:100%;}
+.opt:hover{background:#fff;border-color:var(--blue);color:var(--blue-d);transform:translateX(2px);}
+.opt.sel{background:var(--blue-l);border-color:var(--blue);color:var(--blue-d);}
+.opt-ltr{font-weight:700;min-width:20px;font-size:12px;flex-shrink:0;margin-top:1px;}
+.next-row{display:flex;justify-content:center;margin-top:20px;}
+.next-btn{padding:12px 42px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:14.5px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;opacity:.3;pointer-events:none;transition:all .15s;letter-spacing:.02em;}
+.next-btn.on{opacity:1;pointer-events:auto;}
+.next-btn.on:hover{background:var(--blue-d);transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,86,160,.3);}
+
+/* ── Done ── */
+.done-wrap{max-width:480px;width:100%;text-align:center;animation:fadeUp .4s ease both;}
+.done-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3rem 2rem;box-shadow:var(--shadow);}
+.tick-ring{width:72px;height:72px;background:var(--green-l);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:34px;color:var(--green);animation:pop .4s cubic-bezier(.34,1.56,.64,1) both;}
+.done-card h2{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;color:var(--text);margin-bottom:10px;}
+.done-card p{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:4px;}
+.status{display:inline-block;margin-top:22px;padding:8px 22px;border-radius:20px;font-size:13px;font-weight:500;}
+.s-ok{background:var(--green-l);color:var(--green);}
+.s-err{background:var(--red-l);color:var(--red);}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pop{from{opacity:0;transform:scale(.5);}to{opacity:1;transform:scale(1);}}
+</style>
+</head>
+<body>
+<div class="page" id="page">
+  <div id="root"></div>
+</div>
+
+<script>
+/* ── EmailJS init ── */
+emailjs.init("ZsnlCwCc_FmIQrPzT");
+var EMAILJS_SERVICE = "service_m1ua7fe";
+var EMAILJS_TEMPLATE = "template_6u78a98";
+var TRAINER_EMAIL = "shahzadkashaf4@gmail.com";
+
+/* ── Questions ── */
+var RAW=[
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"CONCEPTUAL",q:"According to the course definition, which four activities collectively describe the process of data analysis?",o:["Collecting, cleaning, visualising and reporting data","Inspecting, cleaning, transforming and modelling data","Gathering, processing, analysing and publishing data","Exploring, sorting, filtering and aggregating data"],a:1},
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"SCENARIO",q:"A data analyst at a logistics company wants to reduce delivery delays. What should be the very FIRST step they take according to the data analysis process?",o:["Perform an initial EDA on the existing delivery data to spot patterns","Run descriptive statistics to understand the current delivery performance baseline","Define the problem by asking clear questions and understanding the business context","Identify which data sources hold delivery records and assess their quality"],a:2},
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"CONCEPTUAL",q:"During Step 1 of the data analysis process, which of the following would NOT typically be required?",o:["Exploring the data briefly to understand its structure","Speaking to subject matter experts or stakeholders","Removing duplicate rows from the dataset","Identifying what questions the analysis needs to answer"],a:2},
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"SCENARIO",q:"A sales dataset contains 50,000 records but 3,200 are exact duplicates and dates are formatted inconsistently. Which step of the data analysis process addresses this?",o:["Step 2 — Collect Data","Step 4 — Analyse","Step 3 — Clean Data","Step 1 — Ask Questions"],a:2},
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"CONCEPTUAL",q:"Why is the 'Clean Data' step considered one of the most critical stages of the data analysis process?",o:["Because cleaning standardises formats which directly determines which statistical tests can be applied","Because dirty data leads to inaccurate analysis, flawed conclusions and poor decisions","Because it reduces dataset size which improves processing speed in all subsequent steps","Because errors caught at this stage are the only ones that cannot be corrected during interpretation"],a:1},
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"SCENARIO",q:"An analyst notices customer churn increases significantly every time there is a price increase, and certain age groups churn far more than others. Which step is this analyst performing?",o:["Step 5 — Interpret","Step 3 — Clean Data","Step 6 — Communicate","Step 4 — Analyse"],a:3},
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"CONCEPTUAL",q:"What is the key difference between the 'Analyse' step and the 'Interpret' step in the data analysis process?",o:["Analysis is performed by data analysts; interpretation is performed by business stakeholders","Analysis explores data to find patterns; interpretation gives those patterns meaning by reviewing outputs in context","Analysis is quantitative and uses statistical models; interpretation is qualitative and uses written summaries only","Analysis produces a single output; interpretation refines that output through multiple rounds of review"],a:1},
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"SCENARIO",q:"The CEO asks for findings from a completed pricing analysis. Which of the following is NOT an appropriate form of communication for Step 6?",o:["Writing a detailed report summarising key findings and recommendations","Preparing a presentation with visualisations tailored to an executive audience","Creating a business case linking the analysis outcomes to strategic decisions","Re-collecting the original raw data for the CEO to review"],a:3},
+  {ch:1,cl:"Ch 1: Intro to Data Analysis",ct:"ch1",t:"SCENARIO",q:"A junior analyst skips Step 1 and jumps straight to collecting data. What is the most likely consequence?",o:["The analysis will be delayed but will produce correct results once cleaning is complete","The data collected may not match the actual business problem, leading to irrelevant or misleading analysis","The data will be collected efficiently but may require additional cleaning in Step 3","The interpret step will identify the misalignment and redirect the analysis appropriately"],a:1},
+  {ch:2,cl:"Ch 2: Fundamentals of Data",ct:"ch2",t:"CONCEPTUAL",q:"Which of the following best describes the distinction between structured and unstructured data?",o:["Structured data is quantitative and can be statistically analysed; unstructured data is qualitative and cannot","Structured data is organised in rows and columns with a defined format; unstructured data lacks a predefined model","Structured data originates from internal systems; unstructured data originates from external or third-party sources","Structured data is always stored in relational databases; unstructured data is always stored in flat files"],a:1},
+  {ch:2,cl:"Ch 2: Fundamentals of Data",ct:"ch2",t:"SCENARIO",q:"A company stores customer reviews, social media posts, and call centre recordings. What category of data is this and what challenge does it present?",o:["Semi-structured data — contains metadata tags that partially organise content but analysis is still complex","Structured data — can be stored in a CRM and queried using standard filters","Unstructured data — requires processing before it can be analysed numerically","First-party qualitative data — internally collected but requires sentiment categorisation before use"],a:2},
+  {ch:2,cl:"Ch 2: Fundamentals of Data",ct:"ch2",t:"CONCEPTUAL",q:"What is the difference between first-party, second-party, and third-party data?",o:["First-party is the most accurate; second-party is moderately reliable; third-party is least trustworthy by definition","First-party is collected from your own audience; second-party is shared by a trusted partner; third-party is purchased from external providers","First-party covers current customers; second-party covers prospects; third-party covers general market populations","First-party requires consent; second-party is shared under contract; third-party is always anonymised by law"],a:1},
+  {ch:2,cl:"Ch 2: Fundamentals of Data",ct:"ch2",t:"SCENARIO",q:"A retailer shares its loyalty card purchase data with a partner airline so both can improve targeting. From the retailer's perspective, what type of data is being shared?",o:["Second-party data — it becomes second-party the moment it is shared with another organisation","First-party data — the retailer collected it directly from their own customers","Third-party data — the airline will use it for targeting an audience it did not collect from","Co-operative data — a hybrid classification used when two first-party datasets are merged for mutual benefit"],a:1},
+  {ch:2,cl:"Ch 2: Fundamentals of Data",ct:"ch2",t:"CONCEPTUAL",q:"Why is data considered a strategic asset for modern organisations?",o:["Because data ownership provides legal protection against competitor imitation of business processes","Because data enables informed decision-making, pattern identification, efficiency gains, and competitive advantage","Because large volumes of data signal operational maturity and attract investor confidence","Because regulatory frameworks increasingly mandate data collection making it a compliance requirement and asset"],a:1},
+  {ch:3,cl:"Ch 3: Sources of Data",ct:"ch3",t:"SCENARIO",q:"A data analyst needs to access live stock market prices every second for a trading dashboard. Which data source type is MOST appropriate?",o:["A relational database with scheduled micro-batch updates every few seconds","A streaming data pipeline that ingests from a financial data warehouse","API (Application Programming Interface)","A CSV file refreshed automatically by a server-side script every minute"],a:2},
+  {ch:3,cl:"Ch 3: Sources of Data",ct:"ch3",t:"CONCEPTUAL",q:"Which of the following is NOT an advantage of file-based data sources?",o:["They are universally compatible across most software tools and platforms","They require no specialised infrastructure or database management system","They support real-time updates and live data synchronisation","They present data in a human-readable format accessible without technical tools"],a:2},
+  {ch:3,cl:"Ch 3: Sources of Data",ct:"ch3",t:"CONCEPTUAL",q:"What is the fundamental difference between a relational database (SQL) and a non-relational database (NoSQL)?",o:["SQL databases require a dedicated DBA for all operations; NoSQL databases are self-managing by design","SQL stores structured data in tables with defined schemas; NoSQL handles unstructured or flexible data","SQL databases support ACID transactions; NoSQL databases cannot guarantee data consistency under any circumstances","SQL is suited for read-heavy workloads only; NoSQL is optimised exclusively for write-heavy workloads"],a:1},
+  {ch:3,cl:"Ch 3: Sources of Data",ct:"ch3",t:"SCENARIO",q:"A company collects data from Twitter mentions, IoT sensors, and website clickstreams all in real time. Which data source category best describes these inputs?",o:["API-based sources, because each platform exposes data through programmatic endpoints","NoSQL databases, because the data volume and variety require non-relational storage","Manual data entry systems enhanced with automated capture tools","Streaming data sources"],a:3},
+  {ch:3,cl:"Ch 3: Sources of Data",ct:"ch3",t:"CONCEPTUAL",q:"Which combination correctly matches a limitation to its data source type?",o:["Manual data entry — Restricted scalability and high susceptibility to inconsistency over time","APIs — Usage limitations and request limits","File-based sources — No automatic version control and vulnerability to concurrent access conflicts","Databases — Slow performance with large files and limited query capability"],a:1},
+  {ch:3,cl:"Ch 3: Sources of Data",ct:"ch3",t:"SCENARIO",q:"A hospital stores patient records allowing doctors, nurses, and admin staff to access and update the same records simultaneously. What type of data source is this?",o:["A streaming data source, because records are continuously updated in real time across departments","A distributed file system, because access is shared across multiple user groups concurrently","Database managed by a DBMS","An API-based system, because the data is accessed programmatically rather than through direct file storage"],a:2},
+  {ch:3,cl:"Ch 3: Sources of Data",ct:"ch3",t:"SCENARIO",q:"An analyst receives a dataset with missing values, inconsistent date formats, and duplicate records. Which data quality considerations are PRIMARILY violated?",o:["Security requirements and integration requirements","Scalability requirements and update frequency","Data completeness, consistency, and format standardisation","Budget and resources"],a:2},
+  {ch:3,cl:"Ch 3: Sources of Data",ct:"ch3",t:"CONCEPTUAL",q:"Which consideration specifically relates to whether a data source can grow in capacity as data needs increase over time?",o:["Update frequency — how often the source refreshes to accommodate growing volumes of incoming records","Integration requirements — whether the source can connect with an expanding number of downstream systems","Scalability requirements","Security requirements — whether access controls can scale to manage an increasing number of users"],a:2},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"CONCEPTUAL",q:"Which correctly describes the key distinction between discrete and continuous numerical data?",o:["Discrete data is always collected through counting instruments; continuous data is always collected through measuring instruments","Discrete data consists of countable whole numbers with gaps; continuous data can take any value within a range including fractions","Discrete data has a fixed upper limit; continuous data is theoretically unbounded in both directions","Continuous data is preferred for statistical modelling because it carries more information per data point than discrete data"],a:1},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"SCENARIO",q:"A hospital records: blood pressure (120.5 mmHg), number of surgeries (3), patient temperature (37.2C), and beds occupied (42). Which two columns contain DISCRETE data?",o:["Blood pressure and temperature","Number of surgeries and number of beds occupied","Temperature and beds occupied","Blood pressure and number of surgeries"],a:1},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"SCENARIO",q:"A dataset has Eye Colour (Blue, Brown, Green) and Education Level (High School, Bachelor's, Master's, PhD). A trainee argues both are nominal. Is the trainee correct?",o:["Yes — both are label-based categories where values represent groups rather than quantities or rankings","No — both are actually ordinal, since social convention implicitly ranks eye colours by prevalence in population data","No — Eye Colour is nominal; Education Level is ordinal because qualifications follow a meaningful ranking","Partially — Eye Colour is nominal but Education Level is continuous because years of study increase progressively"],a:2},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"CONCEPTUAL",q:"Which statistical measure can be applied to BOTH numerical and categorical data?",o:["Median — it identifies the central value regardless of whether data is numeric or categorical","Standard Deviation — it measures spread around a central point in any type of dataset","Mode","Mean — averaging frequencies works equally well for counts in both numerical and categorical columns"],a:2},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"SCENARIO",q:"A data analyst needs to visualise the distribution of exam scores to understand spread, skewness, and outliers. Which chart type is most appropriate?",o:["Scatter plot — reveals individual score positions and highlights clusters and outliers across the full range","Bar chart — groups scores into defined ranges and shows the frequency of each band clearly","Histogram or Box Plot","Line chart — shows how scores progress sequentially and reveals upward or downward trends over the dataset"],a:2},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"CONCEPTUAL",q:"Why is it sometimes necessary to convert categorical data into numerical data?",o:["To reduce file size, since string-based categorical labels consume significantly more storage than integers","Machine learning algorithms and statistical analysis often require numerical inputs","To enable sorting, since most database engines cannot sort non-numeric columns without prior conversion","To improve visualisation clarity, since charting tools render numerical axes with more precision than category labels"],a:1},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"SCENARIO",q:"A retailer collects: product category (Electronics, Clothing), customer rating (1-5 stars), units sold (integer), revenue per sale (49.99). What is the correct full classification?",o:["Product category=ordinal; customer rating=nominal; units sold=continuous; revenue=discrete","Product category=nominal; customer rating=ordinal; units sold=discrete; revenue=continuous","Product category=nominal; customer rating=discrete; units sold=ordinal; revenue=continuous","Product category=nominal; customer rating=continuous; units sold=discrete; revenue=ordinal"],a:1},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"CONCEPTUAL",q:"Which of the following sets contains ONLY examples of nominal categorical data?",o:["Blood type, Postcode, Job Title","Education Level, Satisfaction Rating, Military Rank","Eye Colour, Country Name, Gender","Goals Scored, Students in Class, Website Visitors"],a:2},
+  {ch:4,cl:"Ch 4: Data Categories & Types",ct:"ch4",t:"SCENARIO",q:"An analyst has Country Name (England, France, Brazil) and Website Visitors (150, 145, 189). She wants the average visitors. Which column supports mean calculation and why?",o:["Country Name — averaging character lengths of country names gives a proxy measure of label complexity","Both columns — frequency counts can be averaged for Country Name just as numeric values can for Website Visitors","Website Visitors — it is discrete numerical data supporting mathematical operations","Neither — the mean requires normally distributed data and Website Visitors is too small a sample to confirm this"],a:2},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"CONCEPTUAL",q:"Which of the following BEST defines Exploratory Data Analysis (EDA)?",o:["A structured hypothesis-testing process that applies pre-selected statistical models to confirm or reject assumptions","The process of examining and summarising a dataset to understand its characteristics, patterns, and anomalies before applying formal modelling","A data governance practice that validates whether collected data meets predefined quality standards before storage","A visualisation-first methodology that converts raw datasets into dashboards to guide business decisions"],a:1},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"CONCEPTUAL",q:"EDA serves three core purposes. Which of the following is NOT one of them?",o:["Data Understanding — gaining insight into the structure, variables, and behaviour of the dataset","Data Quality Validation — detecting missing values, duplicates, outliers, and inconsistencies","Data Monetisation — assessing the commercial value of the dataset for licensing or resale","Better Decision Making — informing choices about analysis methods, transformations, and modelling approaches"],a:2},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"SCENARIO",q:"An analyst finds age values of '-5' and '999', mixed date formats, and duplicated rows. Under which EDA pillar do all these issues fall?",o:["Better Decision Making — these issues influence which statistical model should be selected for the analysis","Univariate Analysis — each issue is detected when examining individual variables in isolation during distribution checks","Data Quality Validation — inconsistencies, value range violations, and duplicates","Data Understanding — identifying unusual patterns deepens the analyst's knowledge of the dataset structure"],a:2},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"CONCEPTUAL",q:"In the EDA workflow, what is the correct sequence of the five steps?",o:["Initial Data Inspection → Univariate Analysis → Data Cleaning → Bivariate/Multivariate Analysis → Summary and Insights","Data Cleaning → Initial Data Inspection → Univariate Analysis → Summary and Insights → Bivariate/Multivariate Analysis","Initial Data Inspection → Data Cleaning → Univariate Analysis → Bivariate/Multivariate Analysis → Summary and Insights","Univariate Analysis → Data Cleaning → Initial Data Inspection → Summary and Insights → Bivariate/Multivariate Analysis"],a:2},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"SCENARIO",q:"A data scientist checks rows/columns count, identifies each variable's data type, and assesses memory usage. Which EDA step does this belong to?",o:["Data Quality Assessment — Missing Values","Descriptive Statistics — Central Tendency","Understanding Data Structure — Data Size and Shape","Bivariate Analysis — Variable Identification"],a:2},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"CONCEPTUAL",q:"Which group of measures belongs entirely to the 'Spread' sub-category of Descriptive Statistics in EDA?",o:["Mean, Median, IQR","Skewness, Kurtosis, Standard Deviation","Range, Variance, Standard Deviation, Quartiles, IQR","Mode, Range, Variance"],a:2},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"SCENARIO",q:"After cleaning a dataset, a team finds co-purchase patterns, seasonal sales spikes, and a correlation between age and purchase frequency. Which EDA step is this?",o:["Step 05 — Summary and Insights","Step 03 — Univariate Analysis","Step 04 — Bivariate/Multivariate Analysis","Step 02 — Data Cleaning"],a:2},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"CONCEPTUAL",q:"Under 'Better Decision Making' in EDA, which four outcomes does EDA help enable?",o:["Data Profiling, Outlier Removal, Variable Encoding, and Normalisation","Feature Engineering, Model Training, Hyperparameter Tuning, and Model Evaluation","Right Analysis Method, Data Transformation, Feature Selection in Modelling, Suggest Data Modelling Techniques","Data Completeness Checks, Format Standardisation, Duplication Removal, and Schema Validation"],a:2},
+  {ch:5,cl:"Ch 5: EDA",ct:"ch5",t:"CONCEPTUAL",q:"A trainee says: 'EDA is only useful for data quality checks — once data is clean, EDA is done.' Why is this incorrect?",o:["The statement is partially correct — EDA ends after cleaning but a second round triggers if modelling results are unexpected","EDA also includes forming hypotheses, selecting features for modelling, and guiding analysis method choice — it extends well beyond quality checks","The statement reverses the process — data quality checks are actually performed after EDA, not during it","EDA is complete after cleaning only when the dataset is small enough to be fully understood through inspection alone"],a:1}
+];
+
+/* ── Shuffle ── */
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+var QS=shuffle(RAW.slice());
+var PCOL={1:"#2D6A2D",2:"#1A56A0",3:"#0E6B5A",4:"#9A5E10",5:"#5040A8"};
+var cur=-1,score=0,cs={1:0,2:0,3:0,4:0,5:0},picked=null,trainee={},answers=[];
+
+function gel(id){return document.getElementById(id);}
+function root(){return gel('root');}
+
+/* ── Cover ── */
+function showCover(){
+  var d=new Date(),dd=String(d.getDate()).padStart(2,'0'),mm=String(d.getMonth()+1).padStart(2,'0'),yy=d.getFullYear();
+  root().innerHTML=
+  '<div class="cover">'+
+  '<p class="brand">Professional Careers Training &amp; Recruitment</p>'+
+  '<div class="cover-icon">📊</div>'+
+  '<h1>Data Analysis<br>Trainer Exam</h1>'+
+  '<p class="tagline">40 questions across 5 chapters · Mixed order · MCQ</p>'+
+  '<div class="chapter-grid">'+
+  '<div class="cg-item cg1"><span class="dot"></span>Ch 1 — Intro to Data Analysis</div>'+
+  '<div class="cg-item cg2"><span class="dot"></span>Ch 2 — Fundamentals of Data</div>'+
+  '<div class="cg-item cg3"><span class="dot"></span>Ch 3 — Sources of Data</div>'+
+  '<div class="cg-item cg4"><span class="dot"></span>Ch 4 — Data Categories &amp; Types</div>'+
+  '<div class="cg-item cg5"><span class="dot"></span>Ch 5 — Exploratory Data Analysis (EDA)</div>'+
+  '</div>'+
+  '<div class="form-card">'+
+  '<h3>Enter your details to begin</h3>'+
+  '<div class="fld"><label>Full Name *</label><input type="text" id="fn" placeholder="e.g. Sara Ahmed" autocomplete="name"/><div class="ferr" id="en">Please enter your full name.</div></div>'+
+  '<div class="fld"><label>Email Address *</label><input type="email" id="fe" placeholder="e.g. sara@example.com" autocomplete="email"/><div class="ferr" id="ee">Please enter a valid email address.</div></div>'+
+  '<div class="fld"><label>Date *</label><input type="date" id="fd" value="'+yy+'-'+mm+'-'+dd+'"/><div class="ferr" id="ed">Please select a date.</div></div>'+
+  '<button class="go-btn" onclick="go()">Begin Exam →</button>'+
+  '</div></div>';
+}
+
+function go(){
+  var nm=(gel('fn').value||'').trim(),em=(gel('fe').value||'').trim(),dt=(gel('fd').value||'').trim(),ok=true;
+  if(!nm){gel('en').style.display='block';ok=false;}else{gel('en').style.display='none';}
+  if(!em||!em.includes('@')||!em.includes('.')){gel('ee').style.display='block';ok=false;}else{gel('ee').style.display='none';}
+  if(!dt){gel('ed').style.display='block';ok=false;}else{gel('ed').style.display='none';}
+  if(!ok)return;
+  var dobj=new Date(dt);
+  trainee={name:nm,email:em,date:dobj.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})};
+  cur=0;score=0;cs={1:0,2:0,3:0,4:0,5:0};answers=[];
+  renderQ();
+}
+
+/* ── Question ── */
+function renderQ(){
+  picked=null;
+  var q=QS[cur],pct=Math.round(cur/QS.length*100),L=['A','B','C','D'],opts='';
+  for(var i=0;i<q.o.length;i++){
+    opts+='<button class="opt" id="o'+i+'" onclick="pick('+i+')"><span class="opt-ltr">'+L[i]+'.</span><span>'+q.o[i]+'</span></button>';
+  }
+  root().innerHTML=
+  '<div class="quiz-wrap">'+
+  '<div class="quiz-top">'+
+  '<span class="quiz-title">Data Analysis Trainer Exam</span>'+
+  '<span class="quiz-info">Q '+(cur+1)+' / '+QS.length+'</span>'+
+  '</div>'+
+  '<div class="prog-track"><div class="prog-fill" style="width:'+pct+'%;background:'+PCOL[q.ch]+'"></div></div>'+
+  '<div class="candidate-bar">Candidate: <strong>'+trainee.name+'</strong> &nbsp;·&nbsp; '+trainee.date+'</div>'+
+  '<div class="q-card">'+
+  '<div class="q-tags">'+
+  '<span class="qn">Q'+(cur+1)+'</span>'+
+  '<span class="tag '+(q.t==='SCENARIO'?'t-scen':'t-con')+'">'+q.t+'</span>'+
+  '<span class="tag '+q.ct+'">'+q.cl+'</span>'+
+  '</div>'+
+  '<p class="q-text">'+q.q+'</p>'+
+  '<div class="opts">'+opts+'</div>'+
+  '</div>'+
+  '<div class="next-row"><button class="next-btn" id="nb" onclick="nextQ()">'+(cur===QS.length-1?'Submit Exam ✓':'Next Question →')+'</button></div>'+
+  '</div>';
+}
+
+function pick(i){
+  document.querySelectorAll('.opt').forEach(function(b){b.classList.remove('sel');});
+  gel('o'+i).classList.add('sel');picked=i;
+  gel('nb').className='next-btn on';
+}
+
+function nextQ(){
+  if(picked===null)return;
+  var q=QS[cur];
+  answers.push({n:cur+1,sel:picked,cor:q.a,ch:q.ch,cl:q.cl,t:q.t,qq:q.q,qo:q.o});
+  if(picked===q.a){score++;cs[q.ch]++;}
+  cur++;
+  if(cur>=QS.length){showDone();}else{renderQ();}
+}
+
+/* ── Done ── */
+function showDone(){
+  root().innerHTML=
+  '<div class="done-wrap"><div class="done-card">'+
+  '<div class="tick-ring">✓</div>'+
+  '<h2>Exam Submitted!</h2>'+
+  '<p>Thank you, <strong>'+trainee.name+'</strong>.</p>'+
+  '<p>Your responses have been recorded.<br>Results will be reviewed by your trainer.</p>'+
+  '<div id="ss"><p style="margin-top:18px;font-size:13px;color:#B0ADA6;">Sending results to trainer…</p></div>'+
+  '</div></div>';
+  sendEmail();
+}
+
+/* ── EmailJS send ── */
+function sendEmail(){
+  var pct=Math.round(score/QS.length*100);
+  var grade=pct>=80?'PASS — Excellent':pct>=60?'PASS — Good':'FAIL — Needs Revision';
+  var L=['A','B','C','D'];
+  var wrongList='';
+  for(var i=0;i<answers.length;i++){
+    var a=answers[i];
+    if(a.sel!==a.cor){
+      wrongList+='Q'+a.n+' ['+a.cl+' | '+a.t+']\n'+a.qq+'\n  Selected : '+L[a.sel]+'. '+a.qo[a.sel]+'\n  Correct  : '+L[a.cor]+'. '+a.qo[a.cor]+'\n\n';
+    }
+  }
+  var body=
+    'DATA ANALYSIS TRAINER EXAM — RESULT REPORT\n'+
+    '='.repeat(50)+'\n\n'+
+    'Candidate Name  : '+trainee.name+'\n'+
+    'Candidate Email : '+trainee.email+'\n'+
+    'Exam Date       : '+trainee.date+'\n\n'+
+    '-'.repeat(40)+'\n'+
+    'SCORE SUMMARY\n'+
+    '-'.repeat(40)+'\n'+
+    'Total Score  : '+score+' / '+QS.length+' ('+pct+'%)\n'+
+    'Grade        : '+grade+'\n\n'+
+    'Ch 1 — Intro to Data Analysis   : '+cs[1]+'\n'+
+    'Ch 2 — Fundamentals of Data     : '+cs[2]+'\n'+
+    'Ch 3 — Sources of Data          : '+cs[3]+'\n'+
+    'Ch 4 — Data Categories & Types  : '+cs[4]+'\n'+
+    'Ch 5 — EDA                      : '+cs[5]+'\n\n'+
+    '-'.repeat(40)+'\n'+
+    'INCORRECT ANSWERS ('+(QS.length-score)+' wrong)\n'+
+    '-'.repeat(40)+'\n'+
+    (wrongList||'None — perfect score!\n')+
+    '='.repeat(50);
+
+  var params={
+    to_email: TRAINER_EMAIL,
+    subject: 'Exam Result: '+trainee.name+' | '+score+'/'+QS.length+' ('+pct+'%) | '+trainee.date,
+    candidate_name: trainee.name,
+    candidate_email: trainee.email,
+    exam_date: trainee.date,
+    score: score+' / '+QS.length+' ('+pct+'%)',
+    grade: grade,
+    breakdown: 'Ch1:'+cs[1]+'  Ch2:'+cs[2]+'  Ch3:'+cs[3]+'  Ch4:'+cs[4]+'  Ch5:'+cs[5],
+    wrong_answers: wrongList||'None — perfect score!',
+    full_report: body
+  };
+
+  emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, params)
+  .then(function(){
+    var s=gel('ss');
+    if(s)s.innerHTML='<span class="status s-ok">✓ Results sent to trainer</span>';
+  })
+  .catch(function(err){
+    console.error('EmailJS error:',err);
+    var s=gel('ss');
+    if(s)s.innerHTML='<span class="status s-err">Auto-send failed. Please screenshot and share with trainer.</span>';
+  });
+}
+
+showCover();
+</script>
+</body>
+</html>
